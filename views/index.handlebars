@@ -1,0 +1,77 @@
+<div class="jumbotron text-white bg-secondary">
+    <h1>This is the burger time ultimate restaurant spectacular</h1>
+</div>
+
+<main class="container">
+    <section class="row">
+        <div class="col-md-12 bg-light">
+            <h2>Create New Burger</h2>
+            <form>
+                <input id="new-burger-name" type="text">
+                <button id="create-new-burger">Create</button>
+            </form>
+        </div>
+    </section>
+    <section class="row">
+        <div class="col-md-6">
+            <h2>Available Burgers</h2>
+            {{#each burgers}} 
+            {{#unless devoured}}
+            <div class="burger-card card">
+                <h4>{{burger_name}}</h4>
+                <button class="consume" id={{id}}>Eat it</button>
+            </div>
+            {{/unless}} 
+            {{/each}}
+        </div>
+        <div class="col-md-6">
+            <h2>Already Consumed Burgers</h2>
+            {{#each burgers}} 
+            {{#if devoured}}
+            <div class="burger-card">
+                <h4>{{burger_name}}</h4>
+            </div>
+            {{/if}} 
+            {{/each}}
+        </div>
+    </section>
+</main>
+
+
+<script>
+    $(document).ready(function () {
+        $("button.consume").on("click", function () {
+            let id = $(this).attr("id");
+            console.log(id);
+            object = {
+                "id": id
+            }
+            $.ajax("/api/burgers", {
+                type: 'PUT',
+                data: object,
+            }).then(
+                function () {
+                    console.log("success");
+                    location.reload();
+                }
+            );
+        });
+
+        $("#create-new-burger").on("click", function () {
+            let burger_name = $("#new-burger-name").val();
+            object = {
+                "burger_name": burger_name
+            }
+            $.ajax("/api/burgers", {
+                type: 'POST',
+                data: object
+            }).then(
+                function () {
+                    console.log("created burger");
+                    location.reload();
+                }
+            );
+        });
+    });
+
+</script>

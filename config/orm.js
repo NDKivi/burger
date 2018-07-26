@@ -2,7 +2,8 @@ const connection = require("./connection.js");
 
 const orm = {
     selectAll: function(cb) {
-        connection.query("SELECT * FROM burgers", function(error, data) {
+        let queryString = "SELECT * FROM burgers";
+        connection.query(queryString, function(error, data) {
             if (error) 
                 throw error;
             cb(data);
@@ -16,9 +17,11 @@ const orm = {
             cb(data);
         });
     },
-    updateOne: function(burgerID, cb) {
+    updateOne: function(id, cb) {
+        console.log("id: " + id)
         let queryString = "UPDATE burgers SET devoured = true WHERE id = ?;";
-        connection.query(queryString, burgerID, function(error, data) {
+        console.log("queryString: " + queryString);
+        connection.query(queryString, id, function(error, data) {
             if (error)
                 throw error;
             cb(data);
